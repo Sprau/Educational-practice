@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Поиск</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      
+      form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      
+      input[type="text"] {
+        padding: 10px;
+        margin: 10px 0;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      
+      button {
+        padding: 10px 20px;
+        background-color: #4285f4;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      
+      button:hover {
+        background-color: #307ad3;
+      }
+
+      .error-message {
+        color: red;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <form onsubmit="return validateForm(event)">
+      <input type="text" id="search-input" placeholder="Введите запрос">
+      <button type="submit">Найти</button>
+      <p id="error-message" class="error-message"></p>
+      <input type="submit" style="display:none">
+      <label><input type="radio" name="search-engine" value="Google" checked onchange="setGoogleSearch()"> Google</label>
+      <label><input type="radio" name="search-engine" value="Yandex" onchange="setYandexSearch()"> Яндекс</label>
+    </form>
+
+    <script>
+      let isGoogleSearch = true; // флаг для определения, какой поисковик был выбран
+
+      function setGoogleSearch() {
+        isGoogleSearch = true;
+      }
+
+      function setYandexSearch() {
+        isGoogleSearch = false;
+      }
+
+      function validateForm(event) {
+        event.preventDefault(); // отменяем отправку формы
+
+        const input = document.getElementById("search-input");
+        const errorMessage = document.getElementById("error-message");
+
+        if (input.value.trim() === "") {
+          errorMessage.innerText = "Ошибка: поле поиска не должно быть пустым!";
+          return false; // не отправляем форму
+        }
+
+        errorMessage.innerText = "";
+
+        if (!isGoogleSearch) {
+          window.location.href = `https://yandex.ru/search/?text=${encodeURIComponent(input.value)}`; // перенаправляем на страницу результатов Яндекса
+        } else {
+          window.location.href = `https://www.google.com/search?q=${encodeURIComponent(input.value)}`; // перенаправляем на страницу результатов Google
+        }
+
+        return true;
+      }
+    </script>
+  </body>
+</html>
